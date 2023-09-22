@@ -15,7 +15,7 @@ def describe(file):
             summary[column] = [
                 values['count'],
                 values['mean'],
-                df[column].std(),
+                values['std'],
                 values['min'],
                 values['25%'],
                 values['50%'],

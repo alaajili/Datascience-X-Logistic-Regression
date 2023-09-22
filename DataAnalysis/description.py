@@ -40,12 +40,30 @@ class Description:
             interpolate_value = lower_value + (upper_value - lower_value) * fraction
             return interpolate_value
     
+    def std(self, column: str, mean: float) -> float:
+        std = 0
+        # sum of squared devuation
+        sum = 0
+        n = 0
+        for value in self.df[column]:
+            if not pd.isnull(value):
+                sum += (value - mean) ** 2
+                n += 1
+        variance = sum / (n - 1)
+        std = math.sqrt(variance)
+        return std
+        
+
+
+
     def get_values(self, column: str):
         mc = self.mean_and_count(column)
+        std = self.std(column, mc['mean'])
         sorted = self.get_sorted_list(column)
         obj = {
             'count': mc['count'],
             'mean': mc['mean'],
+            'std': std,
             'min': self.quantile(0, column, sorted),
             '25%': self.quantile(25, column, sorted),
             '50%': self.quantile(50, column, sorted),
