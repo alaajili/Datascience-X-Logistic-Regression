@@ -2,14 +2,24 @@ import argparse
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+import warnings
+
+warnings.simplefilter(action='ignore', category=FutureWarning)
 
 def pair_plot(file):
     df = pd.read_csv(file)
-    sns.set_theme(style="ticks")
 
-    numeric_data = df.select_dtypes(include='number').reset_index(drop=True)
+    numeric_data = df.select_dtypes(include='number').drop(columns=['Index'])
+    numeric_data['Hogwarts House'] = df['Hogwarts House']
 
-    sns.pairplot(data=numeric_data, hue='Hogwarts House', diag_kind='hist')
+    sns.set_theme(style='ticks')
+    g = sns.pairplot(numeric_data, hue='Hogwarts House', diag_kind='hist', height=1.2)
+
+    for ax in g.axes.flat:
+        ax.set_ylabel(ax.get_ylabel().replace(' ', '\n'))
+        ax.set_xlabel(ax.get_xlabel().replace(' ', '\n'))
+
+
     plt.show()
 
 
