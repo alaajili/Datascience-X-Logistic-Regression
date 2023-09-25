@@ -12,7 +12,6 @@ def pair_plot(file):
     numeric_data = df.select_dtypes(include='number').drop(columns=['Index'])
     numeric_data['Hogwarts House'] = df['Hogwarts House']
 
-    sns.set_theme(style='ticks')
     g = sns.pairplot(numeric_data, hue='Hogwarts House', diag_kind='hist', height=1.2)
 
     for ax in g.axes.flat:
