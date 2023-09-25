@@ -12,7 +12,7 @@ def pair_plot(file):
     numeric_data = df.select_dtypes(include='number').drop(columns=['Index'])
     numeric_data['Hogwarts House'] = df['Hogwarts House']
 
-    g = sns.pairplot(numeric_data, hue='Hogwarts House', diag_kind='hist', height=1.2)
+    g = sns.pairplot(numeric_data, hue='Hogwarts House', diag_kind='hist', height=1.1)
 
     for ax in g.axes.flat:
         ax.set_ylabel(ax.get_ylabel().replace(' ', '\n'))
