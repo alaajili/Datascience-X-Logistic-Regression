@@ -10,9 +10,16 @@ class LogisticRegression:
     def __sigmoid(self, z: float) -> float:
         return 1 / (1 + np.exp(-z))
 
-    def __gradient_descent(self, theta, X, y, learning_rate, epochs):
+    def __cost(self, theta: float, X: np.ndarray, y: np.ndarray) -> float:
+        m = len(y)
+        h = self.__sigmoid(np.dot(X, theta))
+        cost = (-1 / m) * np.sum(y * np.log(h) + (1 - y) * np.log(1 - h))
+        return cost
         
-        for _ in range(epochs):
+
+    def __gradient_descent(self, theta, X, y):
+        
+        for _ in range(self.epochs):
 
     def fit(self, X: np.ndarray, y: np.ndarray) -> None:
         labels = np.unique(y)
@@ -23,5 +30,5 @@ class LogisticRegression:
         for label in labels:
             yOneVsAll = np.where((y == label), 1, 0)
             theta = np.zeros(n)
-            print(label, yOneVsAll)
+            self.__gradient_descent(theta, X, yOneVsAll)
 
