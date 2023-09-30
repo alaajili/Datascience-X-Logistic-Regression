@@ -7,11 +7,22 @@ class LogisticRegression:
         self.learning_rate = learning_rate
         self.epochs = epochs
     
+    
+    def __sigmoid(self, z: float) -> float:
+        return 1 / (1 + np.exp(-z))
+
+    def __gradient_descent(self, learning_rate, epochs):
+        
+        for _ in range(epochs):
+            
 
     def fit(self, X: np.ndarray, y: np.ndarray) -> None:
         labels = np.unique(y)
-        m, num_features = X.shape
-        theta = np.zeros((y.shape[0], num_features))
-        print(theta)
-        # for label in labels:
-            
+        num_labels = y.shape[0]
+        m, n = X.shape
+        theta = np.zeros((num_labels, n))
+
+        for label in labels:
+            yOneVsAll = np.where((y == label), 1, 0)
+            print(label, yOneVsAll)
+
