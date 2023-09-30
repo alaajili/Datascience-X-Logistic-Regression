@@ -1,13 +1,15 @@
 import argparse
 import pandas as pd
 import numpy as np
+from LogisticRegression import LogisticRegression
 
 def train(file: str) -> None:
     df = pd.read_csv(file)
 
     y = np.array(df['Hogwarts House'])
     X = np.array(df[["Herbology", "Divination", "Ancient Runes", "Charms", "Defense Against the Dark Arts"]])
-    print(y)
+    LogReg = LogisticRegression()
+    LogReg.fit(X, y)
     
 
 def main() -> None:
