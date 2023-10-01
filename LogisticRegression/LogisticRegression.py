@@ -7,10 +7,10 @@ class LogisticRegression:
         self.learning_rate = learning_rate
         self.epochs = epochs
 
-    def __sigmoid(self, z: float) -> float:
+    def __sigmoid(self, z):
         return 1 / (1 + np.exp(-z))
 
-    def __cost(self, theta: float, X: np.ndarray, y: np.ndarray) -> float:
+    def __cost(self, theta, X, y):
         m = len(y)
         h = self.__sigmoid(np.dot(X, theta))
         cost = (-1 / m) * np.sum(y * np.log(h) + (1 - y) * np.log(1 - h))
@@ -18,17 +18,25 @@ class LogisticRegression:
         
 
     def __gradient_descent(self, theta, X, y):
-        
+        m = len(y)
+        costs = []
         for _ in range(self.epochs):
+            h = self.__sigmoid(np.dot(X, theta))
+            theta -= self.learning_rate * (np.dot(X.T, h - y) / m)
+            costs.append(self.__cost(theta, X, y))
+        return theta
 
     def fit(self, X: np.ndarray, y: np.ndarray) -> None:
         labels = np.unique(y)
-        num_labels = y.shape[0]
+        num_labels = labels.shape[0]
         m, n = X.shape
         theta_matrix = np.zeros((num_labels, n))
 
+        i = 0
         for label in labels:
             yOneVsAll = np.where((y == label), 1, 0)
             theta = np.zeros(n)
-            self.__gradient_descent(theta, X, yOneVsAll)
+            theta = self.__gradient_descent(theta, X, yOneVsAll)
+            theta_matrix[i, :] = theta
+            i += 1
 
