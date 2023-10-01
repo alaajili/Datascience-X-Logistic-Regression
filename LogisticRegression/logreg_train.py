@@ -10,7 +10,7 @@ def train(file: str) -> None:
     X = np.array(df[["Herbology", "Divination", "Ancient Runes", "Charms", "Defense Against the Dark Arts"]])
     # nan_rows = np.isnan(X).any(axis=1)
     X[np.isnan(X)] = -1
-    print(X)
+
     # min_val = X.min(axis=0)  # Minimum value for each feature
     # max_val = X.max(axis=0)  # Maximum value for each feature
 
@@ -19,9 +19,9 @@ def train(file: str) -> None:
     std_dev = X.std(axis=0)  # Standard deviation for each feature
 
     X = (X - mean) / std_dev
-    print(X)
     LogReg = LogisticRegression()
     LogReg.fit(X, y)
+    LogReg.predict()
     
 
 def main() -> None:
@@ -35,6 +35,7 @@ def main() -> None:
 
     args = parser.parse_args()
     train(args.csv_file)
+    
 
 
 if __name__ == '__main__':
