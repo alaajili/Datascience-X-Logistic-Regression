@@ -1,17 +1,18 @@
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 
 
 class LogisticRegression:
 
     def __init__(self,
-        learning_rate=0.1,
-        epochs=1000,
-        weights='weights.npy'
+        learning_rate=0.05,
+        epochs=1500,
+        weights_file='weights.npy'
     ) -> None:
         self.learning_rate = learning_rate
         self.epochs = epochs
-        self.weights = weights
+        self.weights_file = weights_file
 
     def __sigmoid(self, z):
         return 1 / (1 + np.exp(-z))
@@ -21,7 +22,6 @@ class LogisticRegression:
         h = self.__sigmoid(np.dot(X, theta))
         cost = (-1 / m) * np.sum(y * np.log(h) + (1 - y) * np.log(1 - h))
         return cost
-        
 
     def __gradient_descent(self, theta, X, y):
         costs = []
@@ -32,33 +32,42 @@ class LogisticRegression:
         return theta, costs
 
     def fit(self, X: np.ndarray, y: np.ndarray) -> None:
-        labels = np.unique(y)
-        num_labels = labels.shape[0]
-        n = X.shapep[1]
+        self.labels = np.unique(y)
+        print(self.labels)
+        num_labels = self.labels.shape[0]
+        n = X.shape[1]
         thetas = np.zeros((num_labels, n))
 
         i = 0
-        for label in labels:
+        for label in self.labels:
             yOneVsAll = np.where((y == label), 1, 0)
             theta = np.zeros(n)
             theta , costs = self.__gradient_descent(theta, X, yOneVsAll)
             thetas[i, :] = theta
             i += 1
-            print(label)
             plt.plot(costs, color=f'C{i}', label=label)
-        
-        np.save('weights.npy', thetas)
+
+        np.save(self.weights_file, thetas)
         print(thetas)
         print()
 
-        plt.xlabel('Iterations')
-        plt.ylabel('Cost')
-        plt.legend()
-        plt.show()
+        # plt.xlabel('Iterations')
+        # plt.ylabel('Cost')
+        # plt.legend()
+        # plt.show()
 
     def predict(self, X):
-        thetas = np.load(self.weights)
-        print(thetas.shape, X.sha)
+        thetas = np.load(self.weights_file)
+
+        probabilities = self.__sigmoid(np.dot(X, thetas.T))
+        predictions = np.argmax(probabilities, axis=1)
+        labels = np.array(['Gryffindor', 'Hufflepuff', 'Ravenclaw', 'Slytherin'])
+        predictions = labels[predictions]
+        return predictions
+
+        df = pd.DataFrame({'Hogwarts House': predictions})
+        df.to_csv('houses.csv', index_label='Inde')
+        
         
 
 
