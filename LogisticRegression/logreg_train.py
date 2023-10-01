@@ -5,9 +5,21 @@ from LogisticRegression import LogisticRegression
 
 def train(file: str) -> None:
     df = pd.read_csv(file)
-
+    df.dropna()
     y = np.array(df['Hogwarts House'])
     X = np.array(df[["Herbology", "Divination", "Ancient Runes", "Charms", "Defense Against the Dark Arts"]])
+    # nan_rows = np.isnan(X).any(axis=1)
+    X[np.isnan(X)] = -1
+    print(X)
+    # min_val = X.min(axis=0)  # Minimum value for each feature
+    # max_val = X.max(axis=0)  # Maximum value for each feature
+
+    # X = (X - min_val) / (max_val - min_val)
+    mean = X.mean(axis=0)  # Mean value for each feature
+    std_dev = X.std(axis=0)  # Standard deviation for each feature
+
+    X = (X - mean) / std_dev
+    print(X)
     LogReg = LogisticRegression()
     LogReg.fit(X, y)
     
