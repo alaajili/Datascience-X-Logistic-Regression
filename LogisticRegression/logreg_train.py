@@ -13,6 +13,9 @@ def train(file: str) -> None:
 
     LogReg = LogisticRegression()
     LogReg.fit(X, y)
+    # y_pred = LogReg.predict(X)
+    # print('accuracy score ==> ', np.sum(y == y_pred) / len(y))
+
 
 def main() -> None:
     parser = argparse.ArgumentParser(description='Logistic Regression model train with Gradient Descent')
