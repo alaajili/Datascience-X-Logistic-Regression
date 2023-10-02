@@ -2,37 +2,26 @@ import argparse
 import pandas as pd
 import numpy as np
 from LogisticRegression import LogisticRegression
+from preprocessor import preprocessor
 
 
 def predict(file: str, weights_file: str) -> None:
     df = pd.read_csv(file)
     X = np.array(df[["Herbology", "Divination", "Ancient Runes", "Charms", "Defense Against the Dark Arts"]])
-    # X[np.isnan(X)] = -1
-    for i in range(X.shape[1]):
-        feature_mean = np.nanmean(X[:, i])
-        X[np.isnan(X[:, i]), i] = feature_mean
 
-    min_val = X.min(axis=0)  # Minimum value for each feature
-    max_val = X.max(axis=0)  # Maximum value for each feature
-    X = (X - min_val) / (max_val - min_val)
+    X = preprocessor(X)
 
-    # mean = X.mean(axis=0)  # Mean value for each feature
-    # std_dev = X.std(axis=0)  # Standard deviation for each feature
-
-    # X = (X - mean) / std_dev
-    X = np.c_[np.ones((X.shape[0], 1)), X]
+    thetas = np.load(weights_file)
 
     LogReg = LogisticRegression()
-    predictions = LogReg.predict(X)
+    predictions = LogReg.predict(X, thetas)
     df = pd.DataFrame({'Hogwarts House': predictions})
     df.to_csv('houses.csv', index_label='Index')
 
-    true = pd.read_csv('../datasets/dataset_truth.csv')
-    y_true = true['Hogwarts House']
-    y_pred = df['Hogwarts House']
-    # print(y_true)
-    # accuracy_score = np.round(np.sum(y_true == predictions))
-    print('accuracy score ==> ', np.sum(y_true == y_pred) / len(y_true))
+    # true = pd.read_csv('../datasets/dataset_truth.csv')
+    # y_true = true['Hogwarts House']
+    # y_pred = df['Hogwarts House']
+    # print('accuracy score ==> ', np.sum(y_true == y_pred) / len(y_true))
 
 
 def main() -> None:

@@ -33,41 +33,35 @@ class LogisticRegression:
 
     def fit(self, X: np.ndarray, y: np.ndarray) -> None:
         self.labels = np.unique(y)
-        print(self.labels)
         num_labels = self.labels.shape[0]
         n = X.shape[1]
-        thetas = np.zeros((num_labels, n))
+        self.thetas = np.zeros((num_labels, n))
 
         i = 0
         for label in self.labels:
             yOneVsAll = np.where((y == label), 1, 0)
             theta = np.zeros(n)
             theta , costs = self.__gradient_descent(theta, X, yOneVsAll)
-            thetas[i, :] = theta
+            self.thetas[i, :] = theta
             i += 1
             plt.plot(costs, color=f'C{i}', label=label)
 
-        np.save(self.weights_file, thetas)
-        print(thetas)
-        print()
+        np.save(self.weights_file, self.thetas)
 
-        # plt.xlabel('Iterations')
-        # plt.ylabel('Cost')
-        # plt.legend()
-        # plt.show()
-
-    def predict(self, X):
-        thetas = np.load(self.weights_file)
+    # you should fit your model first before call this predict function !!!
+    # if you want to run it without fitting a model you should give it a weights matrix (thetas)
+    def predict(self, X, thetas=None):
+        try:
+            if thetas is None:
+                thetas = self.thetas
+        except AttributeError:
+            print('Error: weights are not defined. Set it OR fit your model to be generated (thetas)')
+            return None
 
         probabilities = self.__sigmoid(np.dot(X, thetas.T))
         predictions = np.argmax(probabilities, axis=1)
+
         labels = np.array(['Gryffindor', 'Hufflepuff', 'Ravenclaw', 'Slytherin'])
         predictions = labels[predictions]
+
         return predictions
-
-        df = pd.DataFrame({'Hogwarts House': predictions})
-        df.to_csv('houses.csv', index_label='Inde')
-        
-        
-
-
