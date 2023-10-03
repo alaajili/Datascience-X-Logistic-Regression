@@ -18,10 +18,10 @@ def predict(file: str, weights_file: str) -> None:
     df = pd.DataFrame({'Hogwarts House': predictions})
     df.to_csv('houses.csv', index_label='Index')
 
-    # true = pd.read_csv('../datasets/dataset_truth.csv')
-    # y_true = true['Hogwarts House']
-    # y_pred = df['Hogwarts House']
-    # print('accuracy score ==> ', np.sum(y_true == y_pred) / len(y_true))
+    true = pd.read_csv('../datasets/dataset_truth.csv')
+    y_true = true['Hogwarts House']
+    y_pred = df['Hogwarts House']
+    print('accuracy score ==> ', np.sum(y_true == y_pred) / len(y_true))
 
 
 def main() -> None:

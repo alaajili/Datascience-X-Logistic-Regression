@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 from LogisticRegression import LogisticRegression
 from preprocessor import preprocessor
+import time
 
 def train(file: str) -> None:
     df = pd.read_csv(file)
@@ -13,8 +14,8 @@ def train(file: str) -> None:
 
     LogReg = LogisticRegression()
     LogReg.fit(X, y)
-    # y_pred = LogReg.predict(X)
-    # print('accuracy score ==> ', np.sum(y == y_pred) / len(y))
+    y_pred = LogReg.predict(X)
+    print('accuracy score ==> ', np.sum(y == y_pred) / len(y))
 
 
 def main() -> None:
@@ -27,7 +28,11 @@ def main() -> None:
     )
 
     args = parser.parse_args()
+    a=time.time()
     train(args.csv_file)
+    b=time.time()
+    print('it took:', b-a)
+
     
 
 
